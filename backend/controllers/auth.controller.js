@@ -41,6 +41,7 @@ const register = async (req, res) => {
       otpExpires,
       isVerified: false,
     });
+    console.log(newUser);
 
     const mailOption = {
       from: process.env.MAIL_USER,
@@ -119,21 +120,13 @@ const login = async (req, res) => {
     user.refreshToken = refreshToken;
     await user.save();
 
-    console.log("🍪 Setting refresh token cookie...");
-    console.log("Environment:", process.env.NODE_ENV);
-    console.log("Refresh token length:", refreshToken.length);
-
     // Thiết lập cookie
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
-      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-
-    console.log("✅ Cookie set successfully");
-    console.log("Response headers:", res.getHeaders());
 
     res.status(200).json({
       message: "Đăng nhập thành công",
@@ -146,7 +139,6 @@ const login = async (req, res) => {
         age: user.age,
       },
     });
-    console.log("📤 Login response sent successfully");
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Lỗi server", error: error.message });
@@ -170,7 +162,6 @@ const loginFacebook = async (req, res) => {
         role: "patient",
       });
     } else if (!user.faceAppId) {
-      // Cập nhật faceAppId nếu user đã tồn tại nhưng chưa có
       user.faceAppId = id;
       await user.save();
     }
@@ -350,38 +341,81 @@ const logout = async (req, res) => {
   }
 };
 
-//
+//cập nhật profile
 const updateMyself = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { oldPassword, newPassword } = req.body;
-    const { userName, password, age } = req.body;
+    const {
+      oldPassword,
+      newPassword,
+      userName,
+      fullName,
+      email,
+      phone,
+      bio,
+      location,
+      dob,
+    } = req.body;
     const file = req.file;
 
-    // Tìm user
     const user = await users.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "Người dùng không tồn tại" });
     }
 
     if (userName) user.userName = userName;
-    if (age) user.age = age;
-    if (file) user.avatarUrl = file.path;
+    if (fullName) user.fullName = fullName;
+    if (email) {
+      if (email !== user.email) {
+        const existingUser = await users.findOne({ email });
+        if (existingUser) {
+          return res.status(400).json({ message: "Email đã được sử dụng" });
+        }
+        user.email = email;
+      }
+    }
+    if (phone) user.phone = phone;
+    if (bio !== undefined) user.bio = bio;
+    if (location) user.location = location;
+    if (dob) user.dob = new Date(dob);
+
+    // Cập nhật avatar nếu có file upload
+    if (file) {
+      user.avatarUrl = file.path;
+    }
 
     if (oldPassword && newPassword) {
       const isMatch = await bcrypt.compare(oldPassword, user.password);
       if (!isMatch) {
         return res.status(400).json({ message: "Mật khẩu cũ không đúng" });
       }
+
+      if (newPassword.length < 6) {
+        return res
+          .status(400)
+          .json({ message: "Mật khẩu mới phải có ít nhất 6 ký tự" });
+      }
+
       user.password = bcrypt.hashSync(newPassword, 10);
     }
 
+    user.updatedAt = new Date();
+
     await user.save();
 
-    res.status(200).json({ message: "Cập nhật thông tin thành công", user });
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
+    res.status(200).json({
+      message: "Cập nhật thông tin thành công",
+      user: userResponse,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Lỗi server", error: error.message });
+    console.error("Update user error:", error);
+    res.status(500).json({
+      message: "Lỗi server",
+      error: error.message,
+    });
   }
 };
 
@@ -391,7 +425,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await User.findById(id);
+    const user = await users.findById(id);
     done(null, user);
   } catch (error) {
     done(error, null);
@@ -420,8 +454,9 @@ passport.use(
               email: profile.emails[0].value,
               password: randomPassword,
               role: "patient",
-              isVerified: true, // Automatically verify new users
+              isVerified: true,
               avatarUrl: profile.photos ? profile.photos[0].value : null,
+              bio: "",
             });
           }
           await user.save();

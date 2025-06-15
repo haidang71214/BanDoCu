@@ -19,7 +19,7 @@ const authRouter = express.Router();
 authRouter.post("/register", register); // đăng kí
 authRouter.post("/verifyEmail", verifyEmail); // verify email
 authRouter.post("/login", login); // đăng nhập
-authRouter.post("/loginFace", loginFacebook); // loginfb
+authRouter.post("/loginFacebook", loginFacebook); // loginfb
 authRouter.post("/extendToken", extendToken); // extendToken
 authRouter.post("/forgotPassword", forgotPassword); // forgotpass
 authRouter.post("/resetPassword", resetPassword); // resetPass after forgot

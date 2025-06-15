@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AuthForm  from "@/components/AuthForm";
+import AuthForm  from "@/components//Auth/AuthForm";
 import { useAuth } from "@/context/AuthContext";
 import { axiosInstance } from "@/utils/axiosInstance";
 import { useNavigate } from "react-router-dom";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AuthForm from "@/components/AuthForm";
+import AuthForm from "@/components/Auth/AuthForm";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../utils/axiosInstance";
@@ -58,7 +58,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br flex items-center justify-center pt-24">
       <div className="w-full max-w-md">
         <AuthForm
           mode="register"

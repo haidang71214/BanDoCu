@@ -36,11 +36,7 @@ const extendToken = async () => {
     console.log("✅ Token extended successfully");
     return data?.newAccessToken || null;
   } catch (error) {
-    console.log(
-      "❌ Extend token failed:",
-      error.response?.status,
-      error.response?.data
-    );
+    console.log("❌ Extend token failed:", error);
     return null;
   }
 };
@@ -135,11 +131,4 @@ export const fetchFromAPI = async (url: any) => {
     console.error("Error fetching from API:", error);
     throw error;
   }
-};
-
-export const debugAuth = () => {
-  console.log("=== AUTH DEBUG INFO ===");
-  console.log("Access Token:", localStorage.getItem("accessToken"));
-  console.log("All Cookies:", document.cookie);
-  console.log("Base URL:", BASE_URL);
 };
