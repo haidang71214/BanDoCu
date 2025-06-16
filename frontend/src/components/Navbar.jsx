@@ -105,10 +105,10 @@ const Navbar = () => {
                 <div className="absolute top-full right-0 mt-2 z-50 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 min-w-[180px]">
                   <div className="p-2">
                     <button
-                      onClick={() => navigate("/my-profile")}
+                      onClick={() => navigate("/account-settings")}
                       className="flex items-center gap-3 w-full px-4 py-2 text-gray-800 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
                     >
-                      My Profile
+                      Account Settings
                     </button>
                     <button
                       onClick={() => navigate("/my-appointments")}

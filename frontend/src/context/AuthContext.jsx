@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { axiosInstance } from "../utils/axiosInstance";
 
 const AuthContext = createContext();
@@ -25,23 +25,34 @@ export const AuthProvider = ({ children }) => {
     }
   });
 
+  useEffect(() => {
+    if (accessToken) {
+      axiosInstance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${accessToken}`;
+    } else {
+      delete axiosInstance.defaults.headers.common["Authorization"];
+    }
+  }, [accessToken]);
+
   const login = (userData, token) => {
-    setUser(userData);
-    setAccessToken(token);
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("accessToken", token);
+    setUser(userData);
+    setAccessToken(token);
   };
 
   const logout = async () => {
     try {
-      await axiosInstance.post("http://localhost:8080/api/v1/auth/logout");
+      await axiosInstance.post("/api/v1/auth/logout");
     } catch (error) {
       console.error("Lỗi khi đăng xuất:", error);
     } finally {
-      setUser(null);
-      setAccessToken(null);
       localStorage.removeItem("user");
       localStorage.removeItem("accessToken");
+      setUser(null);
+      setAccessToken(null);
+      window.location.href = "/";
     }
   };
 
