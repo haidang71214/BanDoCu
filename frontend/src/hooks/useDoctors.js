@@ -30,7 +30,7 @@ export const useDoctors = () => {
           }
         })
         .filter(Boolean);
-      setDoctors(staticDoctorsTransformed); 
+      setDoctors(staticDoctorsTransformed);
       setLoading(false);
 
       try {

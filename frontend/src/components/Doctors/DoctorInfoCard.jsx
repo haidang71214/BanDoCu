@@ -114,4 +114,4 @@ const DoctorInfoCard = ({ doctor }) => {
   );
 };
 
-export default DoctorInfoCard
+export default DoctorInfoCard;

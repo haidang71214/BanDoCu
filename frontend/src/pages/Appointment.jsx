@@ -22,11 +22,18 @@ const Appointment = () => {
   const daysOfWeeks = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   useEffect(() => {
-    const docInfo = doctors.find((item) => item._id === docId);
-    setDocInfo(docInfo);
-    if (!docInfo) {
-      toast.error("Bác sĩ không tồn tại");
-    }
+    console.log("📌 docId from URL:", docId);
+    console.log(
+      "📌 All doctor IDs from context:",
+      doctors.map((d) => d._id)
+    );
+  }, [docId, doctors]);
+
+  useEffect(() => {
+    if (doctors.length === 0) return;
+
+    const foundDoc = doctors.find((item) => item._id === docId);
+    setDocInfo(foundDoc);
   }, [doctors, docId]);
 
   useEffect(() => {
@@ -105,7 +112,6 @@ const Appointment = () => {
         (slot) => slot.time === slotTime
       );
       const appointmentTime = selectedSlot.dateTime.toISOString();
-      const patientId = user.id;
       const doctorId = docId;
 
       const response = await axiosInstance.post(
@@ -116,8 +122,7 @@ const Appointment = () => {
         }
       );
       toast.success("Đặt lịch thành công");
-      console.log(response);
-      navigate("/my-appointments");
+      console.log("✅ Server Response:", response.data);
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Đặt lịch thất bại");
@@ -125,6 +130,14 @@ const Appointment = () => {
       setIsLoading(false);
     }
   };
+
+  if (!docInfo) {
+    return (
+      <div className="pt-32 text-center text-gray-500 text-lg">
+        Đang tải thông tin bác sĩ...
+      </div>
+    );
+  }
 
   return (
     docInfo && (
