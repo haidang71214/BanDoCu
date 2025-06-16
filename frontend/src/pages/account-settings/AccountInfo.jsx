@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { User, Loader2 } from "lucide-react";
+import { axiosInstance } from "../../utils/axiosInstance";
+import AvatarUpload from "../../components/Auth/AvatarUpload";
 
 const AccountInfo = () => {
   const { user, setUser, accessToken } = useAuth();
@@ -61,8 +62,8 @@ const AccountInfo = () => {
         formDataToSend.append("img", image);
       }
 
-      const res = await axios.post(
-        "http://localhost:8080/api/v1/auth/updateMyself",
+      const res = await axiosInstance.post(
+        "/api/v1/auth/updateMyself",
         formDataToSend,
         {
           headers: {
@@ -89,16 +90,51 @@ const AccountInfo = () => {
     }
   };
 
-  const handleReset = () => {
-    setFormData({
-      fullName: user?.fullName || user?.userName || "",
-      email: user?.email || "",
-      phone: user?.phone || "",
-      bio: user?.bio || "",
-      location: user?.location || "",
-    });
-    setPreview(user?.image || user?.avatarUrl || "");
-    setImage(null);
+  const handleReset = async () => {
+    const resetData = {
+      userName: "",
+      email: "",
+      bio: "",
+    };
+    try {
+      const res = await axiosInstance.post(
+        "/api/v1/auth/updateMyself",
+        resetData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          withCredentials: true,
+        }
+      );
+
+      toast.success("Đặt lại thông tin thành công !!!");
+
+      setFormData((prev) => ({
+        ...prev,
+        fullName: "",
+        email: "",
+        bio: "",
+      }));
+      setImage(null);
+      setPreview("");
+
+      setUser((prev) => ({
+        ...prev,
+        userName: "",
+        email: "",
+        bio: "",
+      }));
+
+      const storedUser = JSON.parse(localStorage.getItem("user")) || {};
+      storedUser.userName = "";
+      storedUser.email = "";
+      storedUser.bio = "";
+      localStorage.setItem("user", JSON.stringify(storedUser));
+    } catch (error) {
+      toast.error("Lỗi khi đặt lại thông tin.");
+      console.log("Lỗi khi đặt lại thông tin", error.message);
+    }
   };
 
   const removeImage = () => {
@@ -119,51 +155,12 @@ const AccountInfo = () => {
         </div>
 
         <div className="space-y-8">
-          <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <h3 className="text-xl font-semibold text-slate-800 mb-6 flex items-center">
-              Ảnh đại diện
-            </h3>
-            <div className="flex items-center gap-8">
-              <div className="relative">
-                {preview ? (
-                  <img
-                    src={preview}
-                    alt="Profile"
-                    className="w-24 h-24 rounded-2xl object-cover shadow-lg border border-slate-200"
-                  />
-                ) : (
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-lg">
-                    {formData.fullName
-                      ? formData.fullName.charAt(0).toUpperCase()
-                      : "U"}
-                  </div>
-                )}
-              </div>
-              <div className="flex-1">
-                <div className="flex flex-wrap gap-3 mb-3">
-                  <label className="cursor-pointer px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                    Tải ảnh lên
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="hidden"
-                    />
-                  </label>
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="px-6 py-3 bg-white text-slate-700 border border-slate-300 rounded-xl hover:bg-slate-50 transition-all duration-200 font-medium shadow-sm hover:shadow-md"
-                  >
-                    Xóa ảnh
-                  </button>
-                </div>
-                <p className="text-sm text-slate-500">
-                  JPG, PNG hoặc GIF tối đa 5MB
-                </p>
-              </div>
-            </div>
-          </div>
+          <AvatarUpload
+            preview={preview}
+            fullName={formData.fullName}
+            handleImageChange={handleImageChange}
+            removeImage={removeImage}
+          />
 
           <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
             <h3 className="text-xl font-semibold text-slate-800 mb-6 flex items-center">
