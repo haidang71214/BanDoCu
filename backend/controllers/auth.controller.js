@@ -366,8 +366,25 @@ const updateMyself = async (req, res) => {
     }
 
     if (userName) user.userName = userName;
-    if (age) user.age = age;
-    if (file) user.avatarUrl = file.path;
+    if (fullName) user.fullName = fullName;
+    if (email) {
+      if (email !== user.email) {
+        const existingUser = await users.findOne({ email });
+        if (existingUser) {
+          return res.status(400).json({ message: "Email đã được sử dụng" });
+        }
+        user.email = email;
+      }
+    }
+    if (phone) user.phone = phone;
+    if (bio !== undefined) user.bio = bio;
+    if (location) user.location = location;
+    if (dob) user.dob = new Date(dob);
+
+    // Cập nhật avatar nếu có file upload
+    if (file) {
+      user.avatarUrl = file.path;
+    }
 
     if (oldPassword && newPassword) {
       const isMatch = await bcrypt.compare(oldPassword, user.password);
@@ -439,7 +456,7 @@ passport.use(
               email: profile.emails[0].value,
               password: randomPassword,
               role: "patient",
-              isVerified: true, // Automatically verify new users
+              isVerified: true,
               avatarUrl: profile.photos ? profile.photos[0].value : null,
               bio: "",
             });
