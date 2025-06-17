@@ -137,6 +137,7 @@ const login = async (req, res) => {
         email: user.email,
         avatarUrl: user.avatarUrl,
         age: user.age,
+        role: user.role
       },
     });
   } catch (error) {
