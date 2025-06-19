@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../utils/axiosInstance.ts";
-import { transformDoctorData } from "../utils/transformDoctorData";
+import { transformDoctorData } from "../utils/transformDoctorData.js";
 import { doctors as staticDoctors } from "../assets/data/doctors";
 
 export const useDoctors = () => {
