@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import AppContextProvider from "./providers/AppProvider.jsx";
 import { AuthProvider } from "./providers/AuthProvider.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { ThemeProvider } from "@/providers/theme-provider";
+import { ThemeProvider } from "./providers/theme-provider.jsx";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
