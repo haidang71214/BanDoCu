@@ -10,7 +10,7 @@ import {
   FileText,
 } from "lucide-react";
 import { axiosInstance } from "@/utils/axiosInstance";
-import AvatarUpload from "@/components/Auth/AvatarUpload";
+import AvatarUpload from "../../components/auth/AvatarUpload";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
