@@ -9,15 +9,6 @@ import {
   NavbarMenuToggle,
 } from "@heroui/navbar";
 import toast from "react-hot-toast";
-import { Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useTheme } from "@/providers/Theme-provider";
 
 const Navbar = () => {
   const navigate = useNavigate();
