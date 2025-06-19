@@ -22,8 +22,8 @@ jobs:
 
       - name: Install BE dependencies (Node.js)
         working-directory: ./backend
-        run: npm install
+        run: bun install
 
       - name: Run backend (optional)
         working-directory: ./backend
-        run: npm start
+        run: bun start
