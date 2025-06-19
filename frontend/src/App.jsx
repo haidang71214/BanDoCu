@@ -6,7 +6,7 @@ import Contact from "./pages/Contact";
 import MyAppointment from "./pages/appointments/MyAppointment";
 import Appointment from "./pages/appointments/Appointment";
 import Navbar from "./components/layouts/Navbar";
-import VerifyEmail from "./pages/Auth/VerifyEmail";
+import VerifyEmail from "./pages/auth/VerifyEmail";
 import ChangePassword from "./pages/account-settings/ChangePassword";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
