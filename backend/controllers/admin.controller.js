@@ -28,7 +28,7 @@ export const checkDoctor = async (userId) => {
   }
 };
 
-export const checkPatients = async (userId) => {
+export const checkPatients = async (req, res) => {
   try {
     const user = await users.findById(userId);
     if (!user) {
@@ -44,7 +44,7 @@ export const checkPatients = async (userId) => {
     return false;
   }
 };
-export const checkReceptionist = async (userId) => {
+export const checkReceptionist = async (req, res) => {
   try {
     const user = await users.findById(userId);
     if (!user) {
@@ -65,7 +65,8 @@ const createUser = async (req, res) => {
   try {
     const { id } = req.user;
     if (checkAdmin(id)) {
-      const { userName, password, role, email } = req.body;
+      const { userName, password, role, email, specialty, type, avatarUrl } =
+        req.body;
 
       // Kiểm tra email hợp lệ bằng Regex
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -87,6 +88,9 @@ const createUser = async (req, res) => {
         password: bcrypt.hashSync(password, 10),
         email,
         role,
+        specialty,
+        type,
+        avatarUrl,
       });
 
       res.status(201).json({ message: "Tạo user thành công", user: newUser });
@@ -200,32 +204,21 @@ const getAlluser = async (req, res) => {
   }
 };
 
-//lấy toàn bộ bác sĩ
-const getAllDoctors = async (req, res) => {
-  try {
-    const doctors = await users.find({ role: "doctor" });
-    res.status(200).json(doctors);
-  } catch (error) {
-    console.error("Lỗi khi lấy danh sách bác sĩ:", error);
-    res.status(500).json({ message: "Lỗi server khi lấy danh sách bác sĩ" });
-  }
-};
-
 // lấy chi tiết của người dùng, dùng cái này lấy chi tiết của thằng bác sĩ cũng được
 const getDetailUser = async (req, res) => {
   const { id } = req.params;
-
+  const userId = req.user.id;
   try {
-    const data = await users.findById(id);
-    if (!data) {
-      return res.status(404).json({ message: "Không tìm thấy người dùng" });
+    if (checkAdmin(userId)) {
+      const data = await users.findById(id);
+      res.status(200).json({ data });
+    } else {
+      res.status(400).json("không có quyền");
     }
-    res.status(200).json({ data });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error });
   }
 };
-
 // auth
 const detailSelf = async (req, res) => {
   const userId = req.user.id;
@@ -283,7 +276,7 @@ const changeRoleUserToDoctor = async (req, res) => {
     const updatedUser = await users.findByIdAndUpdate(
       id,
       {
-        role: "doctor",
+        role: 'doctor',
         specialty,
         licenseNumber,
         bio,
@@ -299,13 +292,13 @@ const changeRoleUserToDoctor = async (req, res) => {
 };
 
 export {
-  createUser,
-  updateUser,
-  deleteUser,
-  getAlluser,
-  getDetailUser,
-  detailSelf,
-  searchDoctors,
-  changeRoleUserToDoctor,
-  getAllDoctors,
-};
+   createUser,
+   updateUser,
+   deleteUser,
+   getAlluser,
+   getDetailUser,
+   detailSelf,
+   searchDoctors,
+   changeRoleUserToDoctor
+   //
+}

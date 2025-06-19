@@ -86,22 +86,42 @@ export const specialityData = [
 
 export const doctors = [
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd799439011",
     name: "Dr. Richard James",
+=======
+    _id: "doc1",
+    name: "Dr. Richard James",
+    gender: "Male",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     image: doc1,
     speciality: "General physician",
     degree: "MBBS",
     experience: "4 Years",
+<<<<<<< HEAD
     about:
       "Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.",
     fees: 50,
+=======
+    about: "Dr. James is committed to preventive medicine...",
+    fees: 50,
+    ratings: 4.6,
+    totalReviews: 23,
+    languages: ["English", "French"],
+    availableDays: ["Monday", "Wednesday", "Friday"],
+    timeSlots: ["09:00 AM - 11:00 AM", "02:00 PM - 05:00 PM"],
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     address: {
       line1: "17th Cross, Richmond",
       line2: "Circle, Ring Road, London",
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd799439012",
+=======
+    _id: "doc2",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Emily Larson",
     image: doc2,
     speciality: "Gynecologist",
@@ -116,7 +136,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd799439013",
+=======
+    _id: "doc3",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Sarah Patel",
     image: doc3,
     speciality: "Dermatologist",
@@ -131,7 +155,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd799439014",
+=======
+    _id: "doc4",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Christopher Lee",
     image: doc4,
     speciality: "Pediatricians",
@@ -146,7 +174,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd799439015",
+=======
+    _id: "doc5",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Jennifer Garcia",
     image: doc5,
     speciality: "Neurologist",
@@ -161,7 +193,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd799439016",
+=======
+    _id: "doc6",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Andrew Williams",
     image: doc6,
     speciality: "Neurologist",
@@ -176,7 +212,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd799439017",
+=======
+    _id: "doc7",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Christopher Davis",
     image: doc7,
     speciality: "General physician",
@@ -191,7 +231,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd799439018",
+=======
+    _id: "doc8",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Timothy White",
     image: doc8,
     speciality: "Gynecologist",
@@ -206,7 +250,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd799439019",
+=======
+    _id: "doc9",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Ava Mitchell",
     image: doc9,
     speciality: "Dermatologist",
@@ -221,7 +269,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd79943901a",
+=======
+    _id: "doc10",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Jeffrey King",
     image: doc10,
     speciality: "Pediatricians",
@@ -236,7 +288,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd79943901b",
+=======
+    _id: "doc11",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Zoe Kelly",
     image: doc11,
     speciality: "Neurologist",
@@ -251,7 +307,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd79943901c",
+=======
+    _id: "doc12",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Patrick Harris",
     image: doc12,
     speciality: "Neurologist",
@@ -266,7 +326,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd79943901d",
+=======
+    _id: "doc13",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Chloe Evans",
     image: doc13,
     speciality: "General physician",
@@ -281,7 +345,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd79943901e",
+=======
+    _id: "doc14",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Ryan Martinez",
     image: doc14,
     speciality: "Gynecologist",
@@ -296,7 +364,11 @@ export const doctors = [
     },
   },
   {
+<<<<<<< HEAD
     _id: "507f1f77bcf86cd79943901f",
+=======
+    _id: "doc15",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     name: "Dr. Amelia Hill",
     image: doc15,
     speciality: "Dermatologist",
@@ -310,4 +382,8 @@ export const doctors = [
       line2: "Circle, Ring Road, London",
     },
   },
+<<<<<<< HEAD
 ];
+=======
+];
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a

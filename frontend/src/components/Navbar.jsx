@@ -18,8 +18,12 @@ const Navbar = () => {
     <HeroNavbar
       shouldHideOnScroll
       isBordered
+<<<<<<< HEAD
       className="px-4 md:px-8 py-4 bg-white backdrop-blur-sm fixed top-0 left-0 right-0 w-full max-w-none z-50 shadow-md"
       maxWidth="full"
+=======
+      className="px-4 md:px-8 py-4 bg-white backdrop-blur-sm fixed top-0 left-0 w-full z-50 shadow-md"
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     >
       <NavbarContent justify="start" className="flex-shrink-0">
         <NavbarBrand
@@ -105,10 +109,17 @@ const Navbar = () => {
                 <div className="absolute top-full right-0 mt-2 z-50 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 min-w-[180px]">
                   <div className="p-2">
                     <button
+<<<<<<< HEAD
                       onClick={() => navigate("/account-settings")}
                       className="flex items-center gap-3 w-full px-4 py-2 text-gray-800 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
                     >
                       Account Settings
+=======
+                      onClick={() => navigate("/my-profile")}
+                      className="flex items-center gap-3 w-full px-4 py-2 text-gray-800 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
+                    >
+                      My Profile
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
                     </button>
                     <button
                       onClick={() => navigate("/my-appointments")}
@@ -154,4 +165,8 @@ const Navbar = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Navbar;
+=======
+export default Navbar;
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a

@@ -8,7 +8,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 const register = async (req, res) => {
   try {
-    const { userName, email, password } = req.body;
+    const { userName, email, password, role } = req.body;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -27,7 +27,7 @@ const register = async (req, res) => {
             : "Tên người dùng đã tồn tại",
       });
     }
-
+    const userRole = role || "patient";
     const hashedPassword = await bcrypt.hash(password, 10);
     const otpCode = crypto.randomBytes(3).toString("hex"); // 6 ký tự
     const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 phút
@@ -36,12 +36,11 @@ const register = async (req, res) => {
       userName,
       email,
       password: hashedPassword,
-      role: "patient",
+      role: userRole,
       otpCode,
       otpExpires,
       isVerified: false,
     });
-    console.log(newUser);
 
     const mailOption = {
       from: process.env.MAIL_USER,
@@ -89,6 +88,46 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+//gửi lại otp
+const resendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await users.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "Email không tồn tại" });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({ message: "Email đã được xác thực" });
+    }
+
+    const newOtpCode = crypto.randomBytes(3).toString("hex");
+    const newOtpExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+    user.otpCode = newOtpCode;
+    user.otpExpires = newOtpExpires;
+    await user.save();
+
+    const mailOption = {
+      from: process.env.MAIL_USER,
+      to: email,
+      subject: "Gửi lại mã xác thực email",
+      text: `Xin chào ${user.userName}, mã xác thực mới của bạn là: ${newOtpCode}. Mã này sẽ hết hạn sau 10 phút.`,
+    };
+
+    await transporter.sendMail(mailOption);
+
+    res.status(200).json({
+      message: "Đã gửi lại mã xác thực đến email của bạn",
+      email,
+    });
+  } catch (error) {
+    console.error("Lỗi khi gửi lại mã OTP:", error);
+    res.status(500).json({ message: "Lỗi server", error: error.message });
+  }
+};
+
 // Đăng nhập
 const login = async (req, res) => {
   try {
@@ -105,7 +144,7 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Mật khẩu không đúng" });
     }
-
+    
     // Tạo token
     const accessToken = await createTokenAsyncKey({
       id: user._id,
@@ -125,7 +164,7 @@ const login = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
     });
 
     res.status(200).json({
@@ -137,7 +176,7 @@ const login = async (req, res) => {
         email: user.email,
         avatarUrl: user.avatarUrl,
         age: user.age,
-        role: user.role
+        role: user.role,
       },
     });
   } catch (error) {
@@ -163,6 +202,7 @@ const loginFacebook = async (req, res) => {
         role: "patient",
       });
     } else if (!user.faceAppId) {
+      // Cập nhật faceAppId nếu user đã tồn tại nhưng chưa có
       user.faceAppId = id;
       await user.save();
     }
@@ -209,7 +249,6 @@ const loginFacebook = async (req, res) => {
 const extendToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
-    console.log("refreshToken in cookie:", refreshToken); // Debug
     if (!refreshToken) {
       return res.status(401).json({ message: "Không tìm thấy refresh token" });
     }
@@ -342,133 +381,91 @@ const logout = async (req, res) => {
   }
 };
 
-//cập nhật profile
+//
 const updateMyself = async (req, res) => {
   try {
     const userId = req.user.id;
-    const {
-      oldPassword,
-      newPassword,
-      userName,
-      fullName,
-      email,
-      phone,
-      bio,
-      location,
-      dob,
-    } = req.body;
+    const { oldPassword, newPassword } = req.body;
+    const { userName, password, age } = req.body;
     const file = req.file;
 
+    // Tìm user
     const user = await users.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "Người dùng không tồn tại" });
     }
 
     if (userName) user.userName = userName;
-    if (fullName) user.fullName = fullName;
-    if (email) {
-      if (email !== user.email) {
-        const existingUser = await users.findOne({ email });
-        if (existingUser) {
-          return res.status(400).json({ message: "Email đã được sử dụng" });
-        }
-        user.email = email;
-      }
-    }
-    if (phone) user.phone = phone;
-    if (bio !== undefined) user.bio = bio;
-    if (location) user.location = location;
-    if (dob) user.dob = new Date(dob);
-
-    // Cập nhật avatar nếu có file upload
-    if (file) {
-      user.avatarUrl = file.path;
-    }
+    if (age) user.age = age;
+    if (file) user.avatarUrl = file.path;
 
     if (oldPassword && newPassword) {
       const isMatch = await bcrypt.compare(oldPassword, user.password);
       if (!isMatch) {
         return res.status(400).json({ message: "Mật khẩu cũ không đúng" });
       }
-
-      if (newPassword.length < 6) {
-        return res
-          .status(400)
-          .json({ message: "Mật khẩu mới phải có ít nhất 6 ký tự" });
-      }
-
       user.password = bcrypt.hashSync(newPassword, 10);
     }
 
-    user.updatedAt = new Date();
-
     await user.save();
 
-    const userResponse = user.toObject();
-    delete userResponse.password;
-
-    res.status(200).json({
-      message: "Cập nhật thông tin thành công",
-      user: userResponse,
-    });
+    res.status(200).json({ message: "Cập nhật thông tin thành công", user });
   } catch (error) {
-    console.error("Update user error:", error);
-    res.status(500).json({
-      message: "Lỗi server",
-      error: error.message,
-    });
+    console.error(error);
+    res.status(500).json({ message: "Lỗi server", error: error.message });
   }
 };
 
-// passport.serializeUser((user, done) => {
-//   done(null, user.id);
-// });
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
 
-// passport.deserializeUser(async (id, done) => {
-//   try {
-//     const user = await users.findById(id);
-//     done(null, user);
-//   } catch (error) {
-//     done(error, null);
-//   }
-// });
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await users.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
+});
 
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: "http://localhost:8080/api/v1/auth/auth/google/callback",
-//     },
-//     async (accessToken, refreshToken, profile, done) => {
-//       try {
-//         let user = await users.findOne({ googleId: profile.id });
-//         if (!user) {
-//           user = await users.findOne({ email: profile.emails[0].value });
-//           if (user) {
-//             user.googleId = profile.id;
-//           } else {
-//             const randomPassword = crypto.randomBytes(16).toString("hex");
-//             user = new users({
-//               googleId: profile.id,
-//               userName: profile.displayName,
-//               email: profile.emails[0].value,
-//               password: randomPassword,
-//               role: "patient",
-//               isVerified: true,
-//               avatarUrl: profile.photos ? profile.photos[0].value : null,
-//               bio: "",
-//             });
-//           }
-//           await user.save();
-//         }
-//         return done(null, user);
-//       } catch (error) {
-//         return done(error, null);
-//       }
-//     }
-//   )
-// );
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:8080/api/v1/auth/auth/google/callback",
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        console.log("Google profile:", profile);
+        let user = await users.findOne({ googleId: profile.id });
+        if (!user) {
+          user = await users.findOne({ email: profile.emails[0].value });
+          if (user) {
+            user.googleId = profile.id;
+          } else {
+            const randomPassword = crypto.randomBytes(16).toString("hex");
+            user = new users({
+              googleId: profile.id,
+              userName: profile.displayName,
+              email: profile.emails[0].value,
+              password: randomPassword,
+              role: "patient",
+              isVerified: true,
+              avatarUrl: profile.photos ? profile.photos[0].value : null,
+            });
+          }
+          await user.save();
+        }
+        return done(null, user);
+      } catch (error) {
+        console.error("Error in Google Strategy:", error); // Log lỗi để debug
+        return done(error, null);
+      }
+    }
+  )
+);
 
 export {
   login,
@@ -480,4 +477,5 @@ export {
   logout,
   updateMyself,
   verifyEmail,
+  resendOtp,
 };

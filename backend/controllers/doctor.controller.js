@@ -1,3 +1,4 @@
+// làm cho doctor
 import mongoose from "mongoose";
 import appointments from "../model/apointmentSchema.js";
 import MedicalRecords from "../model/medical.js";
@@ -27,60 +28,53 @@ const getAppointment = async (req, res) => {
 // chỗ này sẽ có 1 cái là tìm kiếm bệnh nhân hoặc các bác sĩ á
 const createAppointment = async (req, res) => {
   try {
-    const userId = req.user.id;            // ID người gọi API
-    const userRole = req.user.role;        // Role người gọi
-    const { id: paramPatientId } = req.params;          // Có thể undefined
-    const { doctorId, appointmentTime } = req.body;     // Bắt buộc gửi
+    // ý tưởng sẽ là ném 1 cái list user xong đó admin click vô tạo lịch khám mới
+    const userId = req.user.id;
+    const { id } = req.params; // patientId
+    const { appointmentTime, doctorId: doctorIdFromBody } = req.body;
 
-    if (!doctorId || !appointmentTime) {
-      return res.status(400).json({ message: "Thiếu doctorId hoặc appointmentTime" });
+    const isAdmin = await checkAdmin(userId);
+    const isDoctor = await checkDoctor(userId);
+
+    if (!isAdmin && !isDoctor) {
+      return res.status(403).json({ message: "Không có quyền tạo lịch" });
     }
 
-    // 🧩 Xác định patientId
-    let patientId;
-    if (userRole === "patient") {
-      // Bệnh nhân chỉ được đặt cho mình
-      if (paramPatientId && paramPatientId !== userId) {
-        return res.status(403).json({ message: "Bạn không thể đặt lịch hộ người khác" });
-      }
-      patientId = userId;
-    } else if (["doctor", "admin"].includes(userRole)) {
-      // Bác sĩ/Admin phải truyền id bệnh nhân
-      patientId = paramPatientId;
-      if (!patientId) {
-        return res.status(400).json({ message: "Thiếu patientId trên URL" });
-      }
-    } else {
-      return res.status(403).json({ message: "Không có quyền đặt lịch" });
+    const doctorId = isAdmin ? doctorIdFromBody : isDoctor ? userId : null;
+    if (!doctorId) {
+      return res.status(400).json({ message: "doctorId không hợp lệ" });
     }
 
-    // 🔎 Kiểm tra tồn tại patient & doctor
-    const [patient, doctor] = await Promise.all([
-      users.findById(patientId),
-      users.findById(doctorId),
-    ]);
-    if (!patient) return res.status(404).json({ message: "Bệnh nhân không tồn tại" });
-    if (!doctor || doctor.role !== "doctor")
-      return res.status(404).json({ message: "Bác sĩ không tồn tại" });
+    // Kiểm tra user có tồn tại không
+    const checkUser = await users.findById(id);
+    if (!checkUser) {
+      return res.status(409).json({ message: "User không tồn tại" });
+    }
 
-    // 🗓️ Kiểm tra thời gian (>=2 ngày, không quá khứ)
+    // Kiểm tra appointmentTime hợp lệ: phải cách ít nhất 2 ngày và không ở quá khứ
     const now = new Date();
-    const apptDate = new Date(appointmentTime);
-    if ((apptDate - now) / (1000 * 60 * 60 * 24) < 2) {
-      return res.status(400).json({ message: "Phải đặt trước ít nhất 2 ngày" });
+    const appointmentDate = new Date(appointmentTime);
+    const diffInMilliseconds = appointmentDate.getTime() - now.getTime();
+    const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
+
+    if (diffInDays < 2) {
+      return res.status(400).json({
+        message:
+          "Lịch khám phải được đặt trước ít nhất 2 ngày và không được là ngày quá khứ.",
+      });
     }
 
-    // ✅ Tạo lịch hẹn
-    const appointment = await appointments.create({
-      doctorId: new mongoose.Types.ObjectId(doctorId),
-      patientId: new mongoose.Types.ObjectId(patientId),
-      appointmentTime: apptDate,
+    // Tạo lịch khám
+    const data = await appointments.create({
+      doctorId: mongoose.Types.ObjectId(doctorId),
+      patientId: mongoose.Types.ObjectId(id),
+      appointmentTime,
     });
 
-    return res.status(201).json({ data: appointment });
-  } catch (err) {
-    console.error("Lỗi tạo lịch:", err);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(200).json({ data });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -372,7 +366,6 @@ const getAndFilterDoctor = async (req, res) => {
         message: "No doctors found matching the criteria",
       });
     }
-
     return res.status(200).json({
       success: true,
       data: doctors,

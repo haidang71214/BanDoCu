@@ -1,11 +1,18 @@
+<<<<<<< HEAD
 import { assets } from "../assets/data/doctors";
+=======
+import { assets } from "@/assets/data/doctors";
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
 
 const Footer = () => {
   return (
     <div className="md:mx-10">
       <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-14 my-10 text-sm">
         {/* Left section */}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
         <div>
           <img className="mb-5 w-40" src={assets.logo} alt="" />
           <p className="w-full md:w-2/3 text-gray-600 leading-6">
@@ -41,4 +48,8 @@ const Footer = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Footer;
+=======
+export default Footer;
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a

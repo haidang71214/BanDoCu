@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { createContext, useContext, useEffect, useState } from "react";
 import { axiosInstance } from "../utils/axiosInstance";
+=======
+import { createContext, useContext, useState } from "react";
+import {axiosInstance} from '../utils/axiosInstance'
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
 
 const AuthContext = createContext();
 
@@ -25,6 +30,7 @@ export const AuthProvider = ({ children }) => {
     }
   });
 
+<<<<<<< HEAD
   useEffect(() => {
     if (accessToken) {
       axiosInstance.defaults.headers.common[
@@ -41,10 +47,18 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("accessToken", token);
     setUser(userData);
     setAccessToken(token);
+=======
+  const login = (userData, token) => {
+    setUser(userData);
+    setAccessToken(token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("accessToken", token);
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
   };
 
   const logout = async () => {
     try {
+<<<<<<< HEAD
       await axiosInstance.post("/api/v1/auth/logout");
     } catch (error) {
       console.error("Lỗi khi đăng xuất:", error);
@@ -54,6 +68,16 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       setAccessToken(null);
       window.location.href = "/";
+=======
+      await axiosInstance.post('http://localhost:8080/api/v1/auth/logout')
+    } catch (error) {
+      console.error("Lỗi khi đăng xuất:", error);
+    } finally {
+      setUser(null);
+      setAccessToken(null);
+      localStorage.removeItem("user");
+      localStorage.removeItem("accessToken");
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     }
   };
 

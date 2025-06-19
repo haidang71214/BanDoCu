@@ -10,6 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
+=======
+    "@faker-js/faker": "^9.8.0",
+    "@heroui/button": "^2.2.20",
+    "@heroui/card": "^2.2.19",
+    "@heroui/input": "^2.4.20",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     "@heroui/input-otp": "^2.1.19",
     "@heroui/navbar": "^2.2.18",
     "@radix-ui/react-label": "^2.1.7",
@@ -20,8 +27,15 @@
     "axios": "^1.9.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+<<<<<<< HEAD
     "lucide-react": "^0.511.0",
     "motion": "^12.15.0",
+=======
+    "input-otp": "^1.4.2",
+    "lucide-react": "^0.511.0",
+    "motion": "^12.15.0",
+    "passport-google-oauth20": "^2.0.0",
+>>>>>>> 20cc38228264b7523930b8c862b8c524042c2b8a
     "postcss": "^8.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
