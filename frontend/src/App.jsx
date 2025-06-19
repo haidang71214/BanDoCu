@@ -20,6 +20,7 @@ import AccountInfo from "./pages/account-settings/AccountInfo";
 import SecuritySettings from "./pages/account-settings/SecuritySettings";
 import AdminDashboard from "../src/admin-fe/AdminUser";
 import AdminMedicine from "../src/admin-fe/AdminMedicine";
+
 const App = () => {
   return (
     <div className="mx-4 sm:mx-[10%]">
