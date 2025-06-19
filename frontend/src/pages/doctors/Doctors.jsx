@@ -2,11 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../../providers/AuthProvider";
 import { useDoctors } from "../../hooks/useDoctors";
-import DoctorsHero from "../../components/Doctors/DoctorsHero";
-import SpecialtySidebar from "../../components/Doctors/SpecialtySidebar";
-import DoctorsHeader from "../../components/Doctors/DoctorsHeader";
-import DoctorsGrid from "../../components/Doctors/DoctorsGrid";
-import DoctorsPagination from "../../components/Doctors/DoctorsPagination";
+import DoctorsHero from "../../components/doctors/DoctorsHero";
+import SpecialtySidebar from "../../components/doctors/SpecialtySidebar";
+import DoctorsHeader from "../../components/doctors/DoctorsHeader";
+import DoctorsGrid from "../../components/doctors/DoctorsGrid";
+import DoctorsPagination from "../../components/doctors/DoctorsPagination";
 
 const Doctors = () => {
   const { user } = useAuth();
