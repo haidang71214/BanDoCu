@@ -20,10 +20,10 @@ jobs:
         working-directory: ./frontend
         run: bun run build
 
-      - name: Install BE dependencies
+      - name: Install BE dependencies (Node.js)
         working-directory: ./backend
-        run: bun install
+        run: npm install
 
-      - name: Build BE
+      - name: Run backend (optional)
         working-directory: ./backend
-        run: bun run build
+        run: npm start
