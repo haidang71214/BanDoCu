@@ -18,6 +18,10 @@ import { Toaster } from "react-hot-toast";
 import AccountLayout from "./pages/account-settings/AccountLayout";
 import AccountInfo from "./pages/account-settings/AccountInfo";
 import SecuritySettings from "./pages/account-settings/SecuritySettings";
+import ReceptionistAppointments from "./pages/ReceptionistAppointment";
+import RescheduleAppointment from "./pages/RescheduleAppointment";
+import AppointmentDetail from "./pages/AppointmentDetail";
+import PaymentSuccess from "./pages/PaymentSuccess";
 
 const App = () => {
   return (
@@ -37,6 +41,19 @@ const App = () => {
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/my-appointments" element={<MyAppointment />} />
+        <Route
+          path="/receptionist-appointments"
+          element={<ReceptionistAppointments />}
+        />
+        <Route
+          path="/reschedule-appointment/:appointmentId"
+          element={<RescheduleAppointment />}
+        />
+        <Route
+          path="/appointment-detail/:appointmentId"
+          element={<AppointmentDetail />}
+        />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/appointment/:docId/:userId" element={<Appointment />} />
         <Route path="/account-settings" element={<AccountLayout />}>
           <Route index element={<AccountInfo />} />

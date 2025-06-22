@@ -35,6 +35,7 @@ const register = async (req, res) => {
     const newUser = await users.create({
       userName,
       email,
+      password: hashedPassword,
       dob,
       sex,
       role: "patient",
@@ -139,6 +140,7 @@ const login = async (req, res) => {
         avatarUrl: user.avatarUrl,
         dob: user.dob,
         sex: user.sex,
+        role: user.role,
       },
     });
   } catch (error) {
