@@ -8,7 +8,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 const register = async (req, res) => {
   try {
-    const { userName, password, email, dob, sex } = req.body;
+    const { userName, password, email, dob, sex, role } = req.body;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -27,7 +27,8 @@ const register = async (req, res) => {
             : "Tên người dùng đã tồn tại",
       });
     }
-
+    const allowedRoles = ["patient", "doctor", "receptionist", "admin"];
+    const validatedRole = allowedRoles.includes(role) ? role : "patient";
     const hashedPassword = await bcrypt.hash(password, 10);
     const otpCode = crypto.randomBytes(3).toString("hex"); // 6 ký tự
     const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 phút
@@ -38,7 +39,7 @@ const register = async (req, res) => {
       password: hashedPassword,
       dob,
       sex,
-      role: "patient",
+      role: validatedRole,
       otpCode,
       otpExpires,
       isVerified: false,

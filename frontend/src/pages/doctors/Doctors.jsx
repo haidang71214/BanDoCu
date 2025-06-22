@@ -26,11 +26,11 @@ const Doctors = () => {
     fetchDoctors,
     handlePageChange,
   } = useDoctors();
-
+  
   const handleSpecialtyClick = (value) => {
     const newSpecialty = selectedSpecialty === value ? "" : value;
     setSelectedSpecialty(newSpecialty);
-    navigate(`newSpecialty ? /doctors/${newSpecialty} : "/doctors"`);
+    navigate(newSpecialty ? `/doctors/${newSpecialty}` : "/doctors");
   };
 
   const handleDoctorClick = (doctor) => {
@@ -38,7 +38,7 @@ const Doctors = () => {
       toast.error("Please login to book an appointment!");
       return;
     }
-    navigate(`/appointment/${doctor._id}/${user.id}`);
+    navigate(`/appointment/${doctor._id}`);
   };
 
   const handleRetry = () => {
@@ -47,7 +47,7 @@ const Doctors = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+<div className="w-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <DoctorsHero />
       <div className="max-w-7xl mx-auto px-4 pb-16">
         <div className="flex flex-col xl:flex-row gap-8">

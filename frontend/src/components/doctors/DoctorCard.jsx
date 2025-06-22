@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 const DoctorCard = ({ doctor }) => {
   const renderStars = (rating) => (
     <div className="flex items-center gap-1">
@@ -30,9 +28,7 @@ const DoctorCard = ({ doctor }) => {
       <div className="relative">
         <img
           src={doctor.image || "/default-doctor-avatar.png"}
-          alt={doctor.name}
           className="w-full h-48 object-cover"
-          onError={(e) => (e.target.src = "/default-doctor-avatar.png")}
         />
         <span
           className={`absolute top-2 right-2 px-2 py-1 text-xs font-medium rounded-full ${
@@ -48,15 +44,15 @@ const DoctorCard = ({ doctor }) => {
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-semibold text-gray-800">{doctor.name}</h3>
           {doctor.isVerified && (
-            <img src="/verified-icon.png" alt="Verified" className="w-5 h-5" />
+            <img src="/verified-icon.svg" alt="Verified" className="w-5 h-5" />
           )}
         </div>
         <p className="text-gray-600 text-sm mt-1">{doctor.speciality}</p>
         <p className="text-gray-500 text-sm">{doctor.experience} experience</p>
         {renderStars(doctor.ratings)}
-        <Link className="mt-4 block text-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+        <div className="mt-4 block text-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
           Book Appointment
-        </Link>
+        </div>
       </div>
     </div>
   );

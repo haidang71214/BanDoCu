@@ -2,7 +2,7 @@ import { GoogleIcon } from "../layouts/google-icon";
 
 export default function SocialLoginButton({ text = "Đăng nhập với Google" }) {
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8080/api/v1/auth/auth/google";
+    window.location.href = "http://localhost:8080/api/v1/auth/google";
   };
 
   return (

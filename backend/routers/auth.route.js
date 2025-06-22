@@ -31,7 +31,7 @@ authRouter.post(
   updateMyself
 ); // update myself
 authRouter.get(
-  "/auth/google",
+  "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 

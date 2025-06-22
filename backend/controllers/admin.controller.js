@@ -65,15 +65,29 @@ const createUser = async (req, res) => {
   try {
     const { id } = req.user;
     if (checkAdmin(id)) {
-      const { userName, password, role, email } = req.body;
+      const {
+        userName,
+        password,
+        role,
+        email,
+        dob,
+        sex,
+        speciality,
+        licenseNumber,
+        bio,
+        degree,
+        experience,
+        about,
+        fees,
+        availableDays,
+        availableTimes,
+      } = req.body;
 
-      // Kiểm tra email hợp lệ bằng Regex
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return res.status(400).json({ message: "Email không hợp lệ" });
       }
 
-      // Kiểm tra email đã tồn tại chưa
       const checkUser = await users.findOne({ email });
       if (checkUser) {
         return res
@@ -81,15 +95,27 @@ const createUser = async (req, res) => {
           .json({ message: "User đã tồn tại trong hệ thống" });
       }
 
-      // Hash mật khẩu và tạo user mới
       const newUser = await users.create({
         userName,
         password: bcrypt.hashSync(password, 10),
         email,
         role,
+        dob,
+        sex,
+        speciality,
+        licenseNumber,
+        bio,
+        degree,
+        experience,
+        about,
+        fees,
+        availableDays,
+        availableTimes,
       });
 
       res.status(201).json({ message: "Tạo user thành công", user: newUser });
+    } else {
+      res.status(403).json({ message: "Không có quyền tạo user" });
     }
   } catch (error) {
     res.status(500).json({ message: "Lỗi server", error: error.message });

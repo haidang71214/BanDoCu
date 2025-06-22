@@ -11,7 +11,7 @@ const SpecialtySidebar = ({ selectedSpecialty, onSpecialtyClick }) => {
             </div>
             <h3 className="text-xl font-bold text-gray-800">Specialties</h3>
           </div>
-          
+
           <div className="space-y-2">
             <button
               onClick={() => onSpecialtyClick("")}
@@ -24,15 +24,17 @@ const SpecialtySidebar = ({ selectedSpecialty, onSpecialtyClick }) => {
               <div className="flex items-center justify-between">
                 <span className="font-medium">All Specialties</span>
                 {!selectedSpecialty && (
-                  <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Active</span>
+                  <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
+                    Active
+                  </span>
                 )}
               </div>
             </button>
-            
+
             {specialityData.map(({ speciality }) => (
               <button
                 key={speciality}
-                onClick={() => onSpecialtyClick(speciality)}
+                onClick={() => onSpecialtyClick(speciality.toLowerCase())}
                 className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 group ${
                   selectedSpecialty === speciality
                     ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg transform scale-105"
@@ -42,7 +44,9 @@ const SpecialtySidebar = ({ selectedSpecialty, onSpecialtyClick }) => {
                 <div className="flex items-center justify-between">
                   <span className="font-medium">{speciality}</span>
                   {selectedSpecialty === speciality && (
-                    <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Active</span>
+                    <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
+                      Active
+                    </span>
                   )}
                 </div>
               </button>

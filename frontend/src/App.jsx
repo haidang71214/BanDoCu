@@ -3,24 +3,24 @@ import Home from "./pages/Home";
 import Doctors from "./pages/doctors/Doctors";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import MyAppointment from "./pages/MyAppointment";
-import Appointment from "./pages/Appointment";
-import Navbar from "./components/Navbar";
+import MyAppointment from "./pages/appointments/MyAppointment";
+import Appointment from "./pages/appointments/Appointment";
+import Navbar from "./components/layouts/Navbar";
 import VerifyEmail from "./pages/Auth/VerifyEmail";
 import ChangePassword from "./pages/account-settings/ChangePassword";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import LoginSuccess from "./pages/Auth/LoginSuccess";
-import Footer from "./components/Footer";
+import Footer from "./components/layouts/Footer";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import { Toaster } from "react-hot-toast";
 import AccountLayout from "./pages/account-settings/AccountLayout";
 import AccountInfo from "./pages/account-settings/AccountInfo";
 import SecuritySettings from "./pages/account-settings/SecuritySettings";
-import ReceptionistAppointments from "./pages/ReceptionistAppointment";
-import RescheduleAppointment from "./pages/RescheduleAppointment";
-import AppointmentDetail from "./pages/AppointmentDetail";
+import ReceptionistAppointments from "./pages/appointments/ReceptionistAppointment";
+import RescheduleAppointment from "./pages/appointments/RescheduleAppointment";
+import AppointmentDetail from "./pages/appointments/AppointmentDetail";
 import PaymentSuccess from "./pages/PaymentSuccess";
 
 const App = () => {
@@ -54,7 +54,7 @@ const App = () => {
           element={<AppointmentDetail />}
         />
         <Route path="/payment-success" element={<PaymentSuccess />} />
-        <Route path="/appointment/:docId/:userId" element={<Appointment />} />
+        <Route path="/appointment/:docId" element={<Appointment />} />
         <Route path="/account-settings" element={<AccountLayout />}>
           <Route index element={<AccountInfo />} />
           <Route path="change-password" element={<ChangePassword />} />

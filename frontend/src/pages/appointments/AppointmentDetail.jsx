@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { axiosInstance } from "../utils/axiosInstance";
+import { axiosInstance } from "../../utils/axiosInstance";
 import { toast } from "react-hot-toast";
-import { useAuth } from "../context/AuthContext"; // Make sure you have this
+import { useAuth } from "../../context/AuthContext"; // Make sure you have this
 
 const AppointmentDetail = () => {
   const { appointmentId } = useParams();
@@ -188,7 +188,7 @@ const AppointmentDetail = () => {
         navigate("/my-appointments");
       }, 2000);
     } catch (err) {
-      toast.error("Error saving medical record or prescriptions");
+      toast.error("Error saving medical record or prescriptions", err);
     }
   };
 

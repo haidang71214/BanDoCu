@@ -1,6 +1,6 @@
 import mongoose, { mongo, Types } from 'mongoose';
 const { Schema } = mongoose;
-export const MEDICINE_ENUM = ['tablet', 'syrup', 'capsule', 'ointment']// vien nen, siro, vien nang, thuoc mo
+export const MEDICINE_ENUM = ['tablet', 'syrup', 'capsule', 'ointment']
 // thuốc
 const medicineSchema = new Schema({
    name:{type:String,

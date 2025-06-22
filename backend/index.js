@@ -11,8 +11,6 @@ import rootRouter from "./routers/root.route.js";
 import authRouter from "./routers/auth.route.js";
 import session from "express-session";
 import cookieParser from "cookie-parser";
-import medicineRouter from "./routers/medicine.route.js";
-import doctorRouter from "./routers/doctor.route.js";
 import paymentRoute from "./routers/payment.route.js";
 
 dotenv.config();
@@ -92,8 +90,6 @@ app.use(
 );
 
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/medicines", medicineRouter);
-app.use("/api/v1/doctor", doctorRouter)
 app.use("/api/v1/payment", paymentRoute)
 
 app.use(rootRouter);
@@ -102,6 +98,7 @@ app.use(rootRouter);
  * Routes setup.
  */
 const apiPrefix = process.env.API_PREFIX;
+console.log(apiPrefix);
 /**
  * Handle errors.
  */
