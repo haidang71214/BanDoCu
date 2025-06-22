@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo, Types } from "mongoose";
 const { Schema } = mongoose;
 
 export const ROLE_ENUM = ["patient", "admin", "doctor", "receptionist"];
@@ -38,8 +38,8 @@ const userSchema = new Schema(
       unique: true,
       trim: true,
     },
-    age: {
-      type: Number,
+    dob: {
+      type: Date,
       default: null,
     },
     role: {

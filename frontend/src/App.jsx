@@ -1,21 +1,25 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import Doctors from "./pages/Doctors";
+import Doctors from "./pages/doctors/Doctors";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import MyProfile from "./pages/MyProfile";
-import MyAppointment from "./pages/MyAppointment";
-import Appointment from "./pages/Appointment";
-import Navbar from "./components/Navbar";
-import VerifyEmail from "./pages/VerifyEmail";
-import ChangePassword from "./pages/ChangePassword";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import LoginSuccess from "./pages/LoginSuccess";
-import Footer from "./components/Footer";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import { Toaster } from 'react-hot-toast';
+import MyAppointment from "./pages/appointments/MyAppointment";
+import Appointment from "./pages/appointments/Appointment";
+import Navbar from "./components/layouts/Navbar";
+import VerifyEmail from "./pages/auth/VerifyEmail";
+import ChangePassword from "./pages/account-settings/ChangePassword";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
+import LoginSuccess from "./pages/auth/LoginSuccess";
+import Footer from "./components/layouts/Footer";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import { Toaster } from "react-hot-toast";
+import AccountLayout from "./pages/account-settings/AccountLayout";
+import AccountInfo from "./pages/account-settings/AccountInfo";
+import SecuritySettings from "./pages/account-settings/SecuritySettings";
+import AdminDashboard from "../src/admin-fe/AdminUser";
+import AdminMedicine from "../src/admin-fe/AdminMedicine";
 
 const App = () => {
   return (
@@ -31,15 +35,23 @@ const App = () => {
         <Route path="/auth/register" element={<Register />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/my-profile" element={<MyProfile />} />
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/my-appointments" element={<MyAppointment />} />
-        <Route path="/appointment/:docId" element={<Appointment />} />
+        <Route path="/appointment/:docId/:userId" element={<Appointment />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/medicine" element={<AdminMedicine/>}/>
+        <Route path="/account-settings" element={<AccountLayout />}>
+          <Route index element={<AccountInfo />} />
+          <Route path="change-password" element={<ChangePassword />} />
+          <Route path="security" element={<SecuritySettings />} />
+        </Route>
+                
+
       </Routes>
       <Footer />
-      <Toaster position="top-right"/>
+      <Toaster position="top-center"/>
     </div>
   );
 };

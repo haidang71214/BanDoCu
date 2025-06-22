@@ -86,27 +86,22 @@ export const specialityData = [
 
 export const doctors = [
   {
-    _id: "doc1",
+    _id: "507f1f77bcf86cd799439011",
     name: "Dr. Richard James",
-    gender: "Male",
     image: doc1,
     speciality: "General physician",
     degree: "MBBS",
     experience: "4 Years",
-    about: "Dr. James is committed to preventive medicine...",
+    about:
+      "Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies. Dr. Davis has a strong commitment to delivering comprehensive medical care, focusing on preventive medicine, early diagnosis, and effective treatment strategies.",
     fees: 50,
-    ratings: 4.6,
-    totalReviews: 23,
-    languages: ["English", "French"],
-    availableDays: ["Monday", "Wednesday", "Friday"],
-    timeSlots: ["09:00 AM - 11:00 AM", "02:00 PM - 05:00 PM"],
     address: {
       line1: "17th Cross, Richmond",
       line2: "Circle, Ring Road, London",
     },
   },
   {
-    _id: "doc2",
+    _id: "507f1f77bcf86cd799439012",
     name: "Dr. Emily Larson",
     image: doc2,
     speciality: "Gynecologist",
@@ -121,7 +116,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc3",
+    _id: "507f1f77bcf86cd799439013",
     name: "Dr. Sarah Patel",
     image: doc3,
     speciality: "Dermatologist",
@@ -136,7 +131,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc4",
+    _id: "507f1f77bcf86cd799439014",
     name: "Dr. Christopher Lee",
     image: doc4,
     speciality: "Pediatricians",
@@ -151,7 +146,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc5",
+    _id: "507f1f77bcf86cd799439015",
     name: "Dr. Jennifer Garcia",
     image: doc5,
     speciality: "Neurologist",
@@ -166,7 +161,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc6",
+    _id: "507f1f77bcf86cd799439016",
     name: "Dr. Andrew Williams",
     image: doc6,
     speciality: "Neurologist",
@@ -181,7 +176,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc7",
+    _id: "507f1f77bcf86cd799439017",
     name: "Dr. Christopher Davis",
     image: doc7,
     speciality: "General physician",
@@ -196,7 +191,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc8",
+    _id: "507f1f77bcf86cd799439018",
     name: "Dr. Timothy White",
     image: doc8,
     speciality: "Gynecologist",
@@ -211,7 +206,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc9",
+    _id: "507f1f77bcf86cd799439019",
     name: "Dr. Ava Mitchell",
     image: doc9,
     speciality: "Dermatologist",
@@ -226,7 +221,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc10",
+    _id: "507f1f77bcf86cd79943901a",
     name: "Dr. Jeffrey King",
     image: doc10,
     speciality: "Pediatricians",
@@ -241,7 +236,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc11",
+    _id: "507f1f77bcf86cd79943901b",
     name: "Dr. Zoe Kelly",
     image: doc11,
     speciality: "Neurologist",
@@ -256,7 +251,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc12",
+    _id: "507f1f77bcf86cd79943901c",
     name: "Dr. Patrick Harris",
     image: doc12,
     speciality: "Neurologist",
@@ -271,7 +266,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc13",
+    _id: "507f1f77bcf86cd79943901d",
     name: "Dr. Chloe Evans",
     image: doc13,
     speciality: "General physician",
@@ -286,7 +281,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc14",
+    _id: "507f1f77bcf86cd79943901e",
     name: "Dr. Ryan Martinez",
     image: doc14,
     speciality: "Gynecologist",
@@ -301,7 +296,7 @@ export const doctors = [
     },
   },
   {
-    _id: "doc15",
+    _id: "507f1f77bcf86cd79943901f",
     name: "Dr. Amelia Hill",
     image: doc15,
     speciality: "Dermatologist",
