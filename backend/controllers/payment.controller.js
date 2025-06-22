@@ -86,6 +86,16 @@ export const handlePaymentSuccess = async (req, res) => {
       status: "booked",
     });
 
+    // Store payment history
+    await payments.create({
+      tranSactionNo: orderCode,
+      amount: tempBooking.amount,
+      payMethod: "VNPay", // or get from payment gateway response if available
+      payment_date: new Date(),
+      patientId: tempBooking.patientId,
+      // Add more fields if needed (e.g., appointmentId, response_code, etc.)
+    });
+
     // Optionally, delete tempBooking
     await TempBooking.deleteOne({ _id: tempBooking._id });
 
