@@ -23,6 +23,7 @@ import { middlewareTokenAsyncKey } from "../config/jwt.js";
 const doctorRouter = express.Router();
 // ai search cũng được
 doctorRouter.get("/searchPatients", searchPatients);
+doctorRouter.get("/searchPatients", searchPatients);
 // tạo lịch khám cho tương lai -> truyền thằng userId vô đây
 doctorRouter.post(
   "/createAppointmentFuture/:id?",
@@ -55,7 +56,17 @@ doctorRouter.put(
   middlewareTokenAsyncKey,
   updateAppointment
 );
+doctorRouter.put(
+  "/updateAppointment/:id",
+  middlewareTokenAsyncKey,
+  updateAppointment
+);
 // xóa lịch hẹn, đồng thời gửi mail
+doctorRouter.delete(
+  "/deleteAppointment/:id",
+  middlewareTokenAsyncKey,
+  deleteAppointment
+);
 doctorRouter.delete(
   "/deleteAppointment/:id",
   middlewareTokenAsyncKey,
@@ -67,7 +78,17 @@ doctorRouter.get(
   middlewareTokenAsyncKey,
   getMedicalRecordPatients
 );
+doctorRouter.get(
+  "/getPatientMedicalRecord/:id",
+  middlewareTokenAsyncKey,
+  getMedicalRecordPatients
+);
 // bác sĩ lấy hết hồ sơ bệnh nhân của chính mình
+doctorRouter.get(
+  "/doctorGetMedicalRecord",
+  middlewareTokenAsyncKey,
+  doctorGetMedicalRecord
+);
 doctorRouter.get(
   "/doctorGetMedicalRecord",
   middlewareTokenAsyncKey,
@@ -75,7 +96,13 @@ doctorRouter.get(
 );
 // chỉ có role doctor mới vào được, cái này đang xét với trường hợp tới phòng khám thì mới tạo lịch khám ấy
 // t nghĩ việc này là cần thiết, nếu mình có phát triển thêm thống kê thì việc tạo mới mỗi appoinment là khá cần thiết
+// t nghĩ việc này là cần thiết, nếu mình có phát triển thêm thống kê thì việc tạo mới mỗi appoinment là khá cần thiết
 // lấy id của thằng bệnh nhân
+doctorRouter.post(
+  "/createNowAppoinment/:id",
+  middlewareTokenAsyncKey,
+  createNowAppoinment
+);
 doctorRouter.post(
   "/createNowAppoinment/:id",
   middlewareTokenAsyncKey,

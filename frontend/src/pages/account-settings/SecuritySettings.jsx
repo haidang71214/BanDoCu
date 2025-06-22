@@ -2,7 +2,10 @@ import { useState } from "react";
 
 const SecuritySettings = () => {
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+<<<<<<< HEAD
   const [loginAlerts, setLoginAlerts] = useState(true);
+=======
+>>>>>>> 7b3f7f9b76807f188463fd50c3304484d6d2a9f0
 
   const securityOptions = [
     {

@@ -87,6 +87,7 @@ const getAppointmentById = async (req, res) => {
 // tạo lịch khám cho tương lai, kiểu bệnh nhân đặt trước đồ á
 // check điều kiện xem bệnh nhân có trong db chưa ? nếu mà có rồi thì lấy id nhét vô kiếm
 // không có thì tạo bệnh nhân mới xong nhét id vô,
+// không có thì tạo bệnh nhân mới xong nhét id vô,
 // chỗ này sẽ có 1 cái là tìm kiếm bệnh nhân hoặc các bác sĩ á
 const createAppointment = async (req, res) => {
   try {
@@ -243,17 +244,41 @@ const deleteAppointment = async (req, res) => {
     // thông báo với cái người bác sĩ bị xóa
     const findUser = await users.findById(findAppointment.doctorId);
     const mailOption = {
+const deleteAppointment = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params;
+    const { reason } = req.body;
+    if (!(await checkAdmin(userId)) && !(await checkDoctor(userId))) {
+      return res.status(404).json({ message: "Không có quyền cập nhật" });
+    }
+    const findAppointment = await appointments.findById(id);
+    if (!findAppointment) {
+      return res.status(409).json({ message: "Không tìm thấy cái appoinment" });
+    }
+    const response = await appointments.findByIdAndDelete(id);
+    // có xóa những hồ sơ đi với lịch khám không ?
+    // thông báo với cái người bác sĩ bị xóa
+    const findUser = await users.findById(findAppointment.doctorId);
+    const mailOption = {
       from: "dangpnhde170023@fpt.edu.vn",
       to: findUser.email,
       // lí do xóa ?
       subject: `${reason}`,
       text: "best regart",
     };
+    };
     transporter.sendMail(mailOption, (err, info) => {
       if (err) {
         console.error("Error sending email:", err);
+        console.error("Error sending email:", err);
       }
     });
+    return res.status(200).json({ response });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
     return res.status(200).json({ response });
   } catch (error) {
     throw new Error(error);
@@ -263,8 +288,36 @@ const deleteAppointment = async (req, res) => {
 // Hồ sơ bệnh án	Tạo & cập nhật chẩn đoán, đơn thuốc, cận lâm sàng
 // hồ sơ bệnh án lấy hồ sơ bệnh án của bệnh nhân đó, tạo mới hồ sơ bệnh án
 // với mỗi hồ sơ bệnh án là đi với 1 bộ thuốc "Prescription"
+// với mỗi hồ sơ bệnh án là đi với 1 bộ thuốc "Prescription"
 // lấy hết hồ sơ bệnh án của chính bệnh nhân đó
 const getMedicalRecordPatients = async (req, res) => {
+  try {
+    const { id } = req.params; // id bệnh nhân
+    const userId = req.user.id; // id người gọi API
+    // Kiểm tra quyền
+    if (!(await checkAdmin(userId)) && !(await checkDoctor(userId))) {
+      return res
+        .status(403)
+        .json({ message: "Bạn không có quyền xem hồ sơ này" });
+    }
+    // Tìm tất cả hồ sơ bệnh án của bệnh nhân, populate đơn thuốc
+    const data = await MedicalRecords.find({ patientId: id })
+      .populate("prescriptions")
+      .populate("doctorId", "userName email")
+      .populate("appointmentId");
+
+    if (!data || data.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Không tìm thấy hồ sơ bệnh án cho bệnh nhân này" });
+    }
+
+    return res.status(200).json({ data });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Lỗi server" });
+  }
+};
   try {
     const { id } = req.params; // id bệnh nhân
     const userId = req.user.id; // id người gọi API
@@ -322,8 +375,54 @@ const doctorGetMedicalRecord = async (req, res) => {
     return res.status(500).json({ message: "Lỗi server" });
   }
 };
+  try {
+    const userId = req.user.id;
+    const { doctorId: doctorIdFromBody } = req.body;
+
+    const isAdmin = await checkAdmin(userId);
+    const isDoctor = await checkDoctor(userId);
+
+    if (!isAdmin && !isDoctor) {
+      return res
+        .status(403)
+        .json({ message: "Bạn không có quyền xem hồ sơ này" });
+    }
+
+    // Lấy doctorId tùy role
+    const doctorId = isAdmin ? doctorIdFromBody : isDoctor ? userId : null;
+
+    if (!doctorId) {
+      return res.status(400).json({ message: "doctorId không hợp lệ" });
+    }
+
+    const data = await MedicalRecords.find({ doctorId: doctorId });
+
+    return res.status(200).json({ data });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Lỗi server" });
+  }
+};
 
 // update cái hồ sơ dựa trên lịch khám, thường là thay đổi thuốc, thay đổi hồ sơ
+// search bệnh nhân
+const searchPatients = async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q || q.trim() === "") {
+      return res.status(400).json({ message: "Nhập từ khóa tìm kiếm" });
+    }
+    const regex = new RegExp(q.trim(), "i");
+    const patient = await users.find({
+      role: "patient",
+      $or: [{ userName: regex }, { email: regex }],
+    });
+
+    return res.status(200).json({ data: patient });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 // search bệnh nhân
 const searchPatients = async (req, res) => {
   try {
