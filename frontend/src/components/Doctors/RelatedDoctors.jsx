@@ -11,7 +11,11 @@ const RelatedDoctors = ({ speciality, docId }) => {
   useEffect(() => {
     if (doctors.length > 0 && speciality) {
       const doctorsData = doctors.filter(
-        (doc) => doc.speciality === speciality && doc._id !== docId
+        (doc) =>
+          (Array.isArray(doc.specialty)
+            ? doc.specialty.includes(speciality)
+            : doc.specialty === speciality || doc.speciality === speciality) &&
+          doc._id !== docId
       );
       setRelDoc(doctorsData);
     }
@@ -27,30 +31,37 @@ const RelatedDoctors = ({ speciality, docId }) => {
       </p>
 
       <div className="w-full grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pt-8">
-        {relDoc.slice(0, 5).map((item, index) => (
-          <div
-            onClick={() => {
-              navigate(`/appointment/${item._id}/${userId}`);
-              scrollTo(0, 0);
-            }}
-            key={index}
-            className="bg-white border border-gray-200 rounded-2xl shadow hover:shadow-xl transition-all duration-500 hover:-translate-y-1 cursor-pointer"
-          >
-            <img
-              src={item.image}
-              alt={item.name}
-              className="w-full h-48 object-cover rounded-t-2xl bg-blue-50"
-            />
-            <div className="p-4 space-y-1">
-              <div className="flex items-center gap-2 text-green-500 text-sm font-medium">
-                <div className="w-2 h-2 bg-green-500 rounded-full" />
-                <span>Available</span>
+        {relDoc.slice(0, 5).map((item, index) => {
+          const name = item.userName || item.name || "Unknown";
+          const specialityText = Array.isArray(item.specialty)
+            ? item.specialty.join(", ")
+            : item.specialty || item.speciality || "General";
+          const image = item.avatarUrl || item.image || "/default-doctor-avatar.png";
+          return (
+            <div
+              onClick={() => {
+                navigate(`/appointment/${item._id}/${userId}`);
+                scrollTo(0, 0);
+              }}
+              key={index}
+              className="bg-white border border-gray-200 rounded-2xl shadow hover:shadow-xl transition-all duration-500 hover:-translate-y-1 cursor-pointer"
+            >
+              <img
+                src={image}
+                alt={name}
+                className="w-full h-48 object-cover rounded-t-2xl bg-blue-50"
+              />
+              <div className="p-4 space-y-1">
+                <div className="flex items-center gap-2 text-green-500 text-sm font-medium">
+                  <div className="w-2 h-2 bg-green-500 rounded-full" />
+                  <span>Available</span>
+                </div>
+                <p className="text-lg font-semibold text-gray-800">{name}</p>
+                <p className="text-sm text-gray-500">{specialityText}</p>
               </div>
-              <p className="text-lg font-semibold text-gray-800">{item.name}</p>
-              <p className="text-sm text-gray-500">{item.speciality}</p>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <button

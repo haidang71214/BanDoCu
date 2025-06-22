@@ -11,6 +11,8 @@ export default function Register() {
     password: "",
     confirmPassword: "",
     userName: "",
+    dob: "",
+    sex: ""
   });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -41,6 +43,8 @@ export default function Register() {
         email: formData.email,
         password: formData.password,
         userName: formData.userName,
+        dob: formData.dob,
+        sex: formData.sex
       });
 
       const data = response.data;

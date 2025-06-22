@@ -24,6 +24,7 @@ export const transformDoctorData = (doc, source) => {
       "Thursday",
       "Friday",
     ],
+    availableTimes: doc.availableTimes || ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"],
     timeSlots: doc.timeSlots || ["09:00 AM - 12:00 PM", "02:00 PM - 05:00 PM"],
     isVerified: doc.isVerified || false,
     source: source,

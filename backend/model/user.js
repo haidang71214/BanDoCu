@@ -80,7 +80,7 @@ const userSchema = new Schema(
       default: null,
     },
     // những thuộc tính t bỏ dưới dòng này là những thuộc tính của doctor mới có
-    specialty: {
+    speciality: {
       type: [String], // à, 1 bác sĩ có thể có nhiều chuyên ngành nên cái này mình để mảng thì hợp lí hơn
       enum: DOCTOR_HEHE,
     },
@@ -91,11 +91,35 @@ const userSchema = new Schema(
       // mô tả
       type: String,
     },
+    degree: {
+      type: String,
+      default: "MBBS",
+    },
+    experience: {
+      type: String,
+      default: "N/A"
+    },
+    about: {
+      type: String,
+      default: "",
+    },
+    fees: {
+      type: Number,
+      default: 50,
+    },
+    availableDays: {
+      type: [String],
+      default: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    },
+    availableTimes: {
+      type: [String],
+      default: ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"],
+    },
   },
   { timestamps: true }
 );
 
-const users = mongoose.model("users", userSchema);
+const users = mongoose.model("User", userSchema);
 export { users };
 
 // ADMIN
