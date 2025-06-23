@@ -16,7 +16,7 @@ import paymentRoute from "./routers/payment.route.js";
 dotenv.config();
 
 let __max = 0; // Biến max length cho log
-if (process.env.DEVMODE) {
+if (processlocal.env.DEVMODE) {
   (function () {
     const originalLog = console.log;
     function span(str) {
@@ -55,7 +55,7 @@ app.use(cookieParser());
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "your-secret-key",
+    secret: processlocal.env.SESSION_SECRET || "your-secret-key",
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false }
@@ -64,16 +64,16 @@ app.use(
 /**
  * Init mongoose.
  */
-connect(process.env.MONGODB_URL)
+connect(processlocal.env.MONGODB_URL)
   .then(() => {
     console.log("🚀 Connected to MongoDB successfully!");
   })
   .catch((reason) => console.log(reason));
 
 /**
- * Get port from .env and store in Express.
+ * Get port from local.env and store in Express.
  */
-const port = normalizePort(process.env.PORT || "8080");
+const port = normalizePort(processlocal.env.PORT || "8080");
 app.set("port", port);
 
 /**
@@ -97,7 +97,7 @@ app.use(rootRouter);
 /**
  * Routes setup.
  */
-const apiPrefix = process.env.API_PREFIX;
+const apiPrefix = processlocal.env.API_PREFIX;
 console.log(apiPrefix);
 /**
  * Handle errors.
