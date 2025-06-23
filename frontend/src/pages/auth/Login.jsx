@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AuthForm from "../../components/auth/AuthForm";
+import AuthForm from "../../components/Auth/AuthForm";
 import { useAuth } from "../../providers/AuthProvider";
 import { axiosInstance } from "@/utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
@@ -65,16 +65,16 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <AuthForm
-          mode="login"
-          formData={formData}
-          onChange={handleChange}
-          onSubmit={handleSubmit}
-          loading={loading}
-        />
-      </div>
+  <div className="min-h-screen bg-gradient-to-br flex items-center justify-center p-4">
+    <div className="w-full max-w-4xl"> 
+      <AuthForm
+        mode="login"
+        formData={formData}
+        onChange={handleChange}
+        onSubmit={handleSubmit}
+        loading={loading}
+      />
     </div>
-  );
+  </div>
+);
 }
