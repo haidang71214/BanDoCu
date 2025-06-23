@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "../../providers/AuthProvider";
 import toast from "react-hot-toast";
 import { User, Loader2 } from "lucide-react";
 import { axiosInstance } from "../../utils/axiosInstance";
@@ -107,6 +107,7 @@ const AccountInfo = () => {
           withCredentials: true,
         }
       );
+      console.log(res);
 
       toast.success("Đặt lại thông tin thành công !!!");
 

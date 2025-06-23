@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { axiosInstance } from "../utils/axiosInstance";
 import { toast } from "react-hot-toast";
+import DoctorCard from "../components/Doctors/DoctorCard";
 
 export default function AIDiagnose() {
   const [description, setDescription] = useState("");
@@ -15,10 +16,17 @@ export default function AIDiagnose() {
     setLoading(true);
     setResults([]);
     try {
-      const res = await axiosInstance.post("/api/v1/ai/diagnose", { description });
+      const res = await axiosInstance.post("/api/v1/ai/diagnose", {
+        description,
+      });
       setResults(res.data);
     } catch (err) {
-      toast.error("Không thể chẩn đoán AI.");
+      toast.error(
+        "Không thể chẩn đoán AI.",
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          "Lỗi không xác định"
+      );
     } finally {
       setLoading(false);
     }
@@ -32,7 +40,7 @@ export default function AIDiagnose() {
         rows={4}
         placeholder="Nhập mô tả triệu chứng của bạn..."
         value={description}
-        onChange={e => setDescription(e.target.value)}
+        onChange={(e) => setDescription(e.target.value)}
       />
       <button
         className="px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold"
@@ -57,17 +65,20 @@ export default function AIDiagnose() {
               </div>
               <div>
                 <b>Bác sĩ đề xuất:</b>
-                <ul className="list-disc ml-6">
-                  {item.doctors && item.doctors.length > 0 ? (
-                    item.doctors.map(doc => (
-                      <li key={doc._id}>
-                        {doc.userName || doc.name} ({doc.specialty})
-                      </li>
-                    ))
-                  ) : (
-                    <li>Không tìm thấy bác sĩ phù hợp.</li>
-                  )}
-                </ul>
+                {item.doctors && item.doctors.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+                    {item.doctors.map((doc) => (
+                      <DoctorCard
+                        key={doc._id}
+                        doctor={{ ...doc, source: "mongodb" }}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 italic mt-1">
+                    Không tìm thấy bác sĩ phù hợp.
+                  </p>
+                )}
               </div>
             </div>
           ))}

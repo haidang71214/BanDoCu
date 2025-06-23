@@ -78,6 +78,11 @@ export default function AuthForm({
                   </>
                 )}
               </Button>
+              <div className="relative flex items-center">
+                <div className="flex-grow border-t border-gray-300" />
+                <span className="mx-4 text-sm text-gray-500">Or</span>
+                <div className="flex-grow border-t border-gray-300" />
+              </div>
 
               <SocialLoginButton text={current.googleText} />
             </div>

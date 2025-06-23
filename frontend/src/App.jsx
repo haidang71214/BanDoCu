@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Doctors from "./pages/doctors/Doctors";
 import About from "./pages/About";
@@ -26,46 +26,46 @@ import AIDiagnose from "./pages/AIDiagnose";
 
 const App = () => {
   return (
-    <div className="mx-4 sm:mx-[10%]">
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/doctors" element={<Doctors />} />
-        <Route path="/doctors/:speciality" element={<Doctors />} />
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/login-success" element={<LoginSuccess />} />
-        <Route path="/auth/verify-email" element={<VerifyEmail />} />
-        <Route path="/auth/register" element={<Register />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/change-password" element={<ChangePassword />} />
-        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/my-appointments" element={<MyAppointment />} />
-        <Route path="/ai-diagnose" element={<AIDiagnose />} />
-        <Route
-          path="/receptionist-appointments"
-          element={<ReceptionistAppointments />}
-        />
-        <Route
-          path="/reschedule-appointment/:appointmentId"
-          element={<RescheduleAppointment />}
-        />
-        <Route
-          path="/appointment-detail/:appointmentId"
-          element={<AppointmentDetail />}
-        />
-        <Route path="/payment-success" element={<PaymentSuccess />} />
-        <Route path="/appointment/:docId" element={<Appointment />} />
-        <Route path="/account-settings" element={<AccountLayout />}>
-          <Route index element={<AccountInfo />} />
-          <Route path="change-password" element={<ChangePassword />} />
-          <Route path="security" element={<SecuritySettings />} />
-        </Route>
-      </Routes>
-      <Footer />
-      <Toaster position="top-right" />
-    </div>
+      <div className="mx-4 sm:mx-[10%]">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/doctors" element={<Doctors />} />
+          <Route path="/doctors/:speciality" element={<Doctors />} />
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/login-success" element={<LoginSuccess />} />
+          <Route path="/auth/verify-email" element={<VerifyEmail />} />
+          <Route path="/auth/register" element={<Register />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/my-appointments" element={<MyAppointment />} />
+          <Route path="/ai-diagnose" element={<AIDiagnose />} />
+          <Route
+            path="/receptionist-appointments"
+            element={<ReceptionistAppointments />}
+          />
+          <Route
+            path="/reschedule-appointment/:appointmentId"
+            element={<RescheduleAppointment />}
+          />
+          <Route
+            path="/appointment-detail/:appointmentId"
+            element={<AppointmentDetail />}
+          />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/appointment/:docId" element={<Appointment />} />
+          <Route path="/account-settings" element={<AccountLayout />}>
+            <Route index element={<AccountInfo />} />
+            <Route path="change-password" element={<ChangePassword />} />
+            <Route path="security" element={<SecuritySettings />} />
+          </Route>
+        </Routes>
+        <Footer />
+        <Toaster position="top-right" />
+      </div>
   );
 };
 

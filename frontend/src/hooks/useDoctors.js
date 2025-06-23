@@ -46,13 +46,15 @@ export const useDoctors = () => {
   }, [urlSpeciality]);
 
   const filteredDoctors = selectedSpecialty
-    ? doctors.filter(
-        (doc) =>
-          Array.isArray(doc.speciality) &&
-          doc.speciality.some(
-            (spec) => spec.toLowerCase() === selectedSpecialty.toLowerCase()
-          )
-      )
+    ? doctors.filter((doc) => {
+        const specialties = Array.isArray(doc.speciality)
+          ? doc.speciality
+          : [doc.speciality];
+
+        return specialties.some(
+          (spec) => spec?.toLowerCase?.() === selectedSpecialty.toLowerCase()
+        );
+      })
     : doctors;
 
   const totalPage = Math.ceil(filteredDoctors.length / doctorsPerPage);

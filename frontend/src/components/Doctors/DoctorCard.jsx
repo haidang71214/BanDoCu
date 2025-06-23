@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const DoctorCard = ({ doctor }) => {
-  // Map backend fields to frontend expected fields
+  const navigate = useNavigate();
+
   const name = doctor.userName || doctor.name || "Unknown";
   const speciality = Array.isArray(doctor.specialty)
     ? doctor.specialty.join(", ")
@@ -9,6 +10,10 @@ const DoctorCard = ({ doctor }) => {
   const image = doctor.avatarUrl || doctor.image || "/default-doctor-avatar.png";
   const experience = doctor.experience || "N/A";
   const ratings = doctor.ratings || 0;
+
+  const handleBook = () => {
+    navigate(`/appointment/${doctor._id}`);
+  };
 
   const renderStars = (rating) => (
     <div className="flex items-center gap-1">
@@ -63,9 +68,13 @@ const DoctorCard = ({ doctor }) => {
         <p className="text-gray-600 text-sm mt-1">{speciality}</p>
         <p className="text-gray-500 text-sm">{experience} experience</p>
         {renderStars(ratings)}
-        <Link className="mt-4 block text-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+
+        <button
+          onClick={handleBook}
+          className="mt-4 w-full text-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+        >
           Book Appointment
-        </Link>
+        </button>
       </div>
     </div>
   );

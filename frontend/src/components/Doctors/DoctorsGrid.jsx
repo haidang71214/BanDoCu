@@ -1,7 +1,7 @@
 import DoctorCard from "./DoctorCard";
-import LoadingState from "./LoadingState";
-import ErrorState from "./ErrorState";
-import EmptyState from "./EmptyState";
+import LoadingState from "../states/LoadingState";
+import ErrorState from "../states/ErrorState";
+import EmptyState from "../states/EmptyState";
 
 const DoctorsGrid = ({
   loading,
@@ -37,8 +37,10 @@ const DoctorsGrid = ({
           onClick={() => onDoctorClick(doctor)}
           className="group cursor-pointer transform transition-all duration-300 hover:scale-105 hover:-translate-y-2"
           style={{
+            animationDuration: "0.6s",
+            animationTimingFunction: "ease-out",
+            animationFillMode: "forwards",
             animationDelay: `${index * 100}ms`,
-            animation: "fadeInUp 0.6s ease-out forwards",
           }}
         >
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 group-hover:bg-white relative">
