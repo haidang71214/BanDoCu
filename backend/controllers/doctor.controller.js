@@ -484,7 +484,7 @@ const createPrescription = async (req, res) => {
 
 const updateMedicalRecord = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { medicalRecordId } = req.params;
     const { symptoms, diagnosis, conclusion, prescriptions } = req.body;
     const updateData = {};
     if (symptoms !== undefined) updateData.symptoms = symptoms;
@@ -493,7 +493,7 @@ const updateMedicalRecord = async (req, res) => {
     if (prescriptions !== undefined) updateData.prescriptions = prescriptions;
 
     const updated = await MedicalRecords.findByIdAndUpdate(
-      id,
+      medicalRecordId,
       updateData,
       { new: true }
     );

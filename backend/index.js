@@ -12,6 +12,7 @@ import authRouter from "./routers/auth.route.js";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import paymentRoute from "./routers/payment.route.js";
+import aiRoutes from "./routers/ai.route.js";
 
 dotenv.config();
 
@@ -91,6 +92,7 @@ app.use(
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/payment", paymentRoute)
+app.use("/api/v1/ai", aiRoutes);
 
 app.use(rootRouter);
 

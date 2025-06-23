@@ -18,6 +18,12 @@ export const createPaymentLink = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
+    const now = new Date();
+    const apptTime = new Date(appointmentTime);
+    if (apptTime < now) {
+      return res.status(400).json({ message: "Can not booking appointment in the past" });
+    }
+
     // Find user info
     const user = await users.findById(patientId);
     if (!user) {

@@ -1,5 +1,5 @@
 import { get_diagnosis_from_gemini } from "../config/aisetup.js";
-import { users } from "../config/model/user.js";
+import { users } from "../model/user.js";
 
 const GENAIHEHE = async (req, res) => {
   const { description } = req.body;
