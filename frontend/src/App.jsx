@@ -22,6 +22,7 @@ import ReceptionistAppointments from "./pages/ReceptionistAppointment";
 import RescheduleAppointment from "./pages/RescheduleAppointment";
 import AppointmentDetail from "./pages/AppointmentDetail";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import AIDiagnose from "./pages/AIDiagnose";
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/my-appointments" element={<MyAppointment />} />
+        <Route path="/ai-diagnose" element={<AIDiagnose />} />
         <Route
           path="/receptionist-appointments"
           element={<ReceptionistAppointments />}
