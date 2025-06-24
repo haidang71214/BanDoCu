@@ -1,6 +1,21 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import verifiedIcon from "../../assets/images/verified_icon.svg";
 
 const DoctorCard = ({ doctor }) => {
+  const navigate = useNavigate();
+
+  const name = doctor.userName || doctor.name || "Unknown";
+  const speciality = Array.isArray(doctor.specialty)
+    ? doctor.specialty.join(", ")
+    : doctor.specialty || doctor.speciality || "General";
+  const image = doctor.avatarUrl || doctor.image || "/default-doctor-avatar.png";
+  const experience = doctor.experience || "N/A";
+  const ratings = doctor.ratings || 0;
+
+  const handleBook = () => {
+    navigate(`/appointment/${doctor._id}`);
+  };
+
   const renderStars = (rating) => (
     <div className="flex items-center gap-1">
       {[...Array(5)].map((_, i) => (
@@ -29,8 +44,8 @@ const DoctorCard = ({ doctor }) => {
     <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
       <div className="relative">
         <img
-          src={doctor.image || "/default-doctor-avatar.png"}
-          alt={doctor.name}
+          src={image}
+          alt={name}
           className="w-full h-48 object-cover"
           onError={(e) => (e.target.src = "/default-doctor-avatar.png")}
         />
@@ -46,17 +61,21 @@ const DoctorCard = ({ doctor }) => {
       </div>
       <div className="p-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-xl font-semibold text-gray-800">{doctor.name}</h3>
+          <h3 className="text-xl font-semibold text-gray-800">{name}</h3>
           {doctor.isVerified && (
-            <img src="/verified-icon.png" alt="Verified" className="w-5 h-5" />
+            <img src={verifiedIcon} alt="Verified" className="w-5 h-5" />
           )}
         </div>
-        <p className="text-gray-600 text-sm mt-1">{doctor.speciality}</p>
-        <p className="text-gray-500 text-sm">{doctor.experience} experience</p>
-        {renderStars(doctor.ratings)}
-        <Link className="mt-4 block text-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+        <p className="text-gray-600 text-sm mt-1">{speciality}</p>
+        <p className="text-gray-500 text-sm">{experience} experience</p>
+        {renderStars(ratings)}
+
+        <button
+          onClick={handleBook}
+          className="mt-4 w-full text-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+        >
           Book Appointment
-        </Link>
+        </button>
       </div>
     </div>
   );

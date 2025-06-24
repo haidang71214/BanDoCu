@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../providers/AuthProvider";
+import { useAuth } from "../../context/AuthContext";
 
 const LoginSuccess = () => {
   const navigate = useNavigate();
