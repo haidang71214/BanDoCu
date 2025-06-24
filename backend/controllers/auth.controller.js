@@ -41,6 +41,7 @@ const register = async (req, res) => {
       otpExpires,
       isVerified: false,
     });
+    console.log(newUser);
 
     const mailOption = {
       from: process.env.MAIL_USER,
@@ -52,7 +53,8 @@ const register = async (req, res) => {
     await transporter.sendMail(mailOption);
 
     res.status(201).json({
-      message: "Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản.",
+      message:
+        "Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản.",
       email,
     });
   } catch (error) {
@@ -123,7 +125,7 @@ const login = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
@@ -135,6 +137,7 @@ const login = async (req, res) => {
         email: user.email,
         avatarUrl: user.avatarUrl,
         age: user.age,
+        role: user.role
       },
     });
   } catch (error) {
@@ -160,7 +163,6 @@ const loginFacebook = async (req, res) => {
         role: "patient",
       });
     } else if (!user.faceAppId) {
-      // Cập nhật faceAppId nếu user đã tồn tại nhưng chưa có
       user.faceAppId = id;
       await user.save();
     }
@@ -207,6 +209,7 @@ const loginFacebook = async (req, res) => {
 const extendToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
+    console.log("refreshToken in cookie:", refreshToken); // Debug
     if (!refreshToken) {
       return res.status(401).json({ message: "Không tìm thấy refresh token" });
     }
@@ -304,7 +307,9 @@ const logout = async (req, res) => {
     // Lấy refreshToken từ cookie
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
-      return res.status(400).json({ message: "Không tìm thấy refreshToken trong cookie" });
+      return res
+        .status(400)
+        .json({ message: "Không tìm thấy refreshToken trong cookie" });
     }
 
     // Tìm user theo refreshToken
@@ -337,38 +342,81 @@ const logout = async (req, res) => {
   }
 };
 
-//
+//cập nhật profile
 const updateMyself = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { oldPassword, newPassword } = req.body;
-    const { userName, password, age } = req.body;
+    const {
+      oldPassword,
+      newPassword,
+      userName,
+      fullName,
+      email,
+      phone,
+      bio,
+      location,
+      dob,
+    } = req.body;
     const file = req.file;
 
-    // Tìm user
     const user = await users.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "Người dùng không tồn tại" });
     }
 
     if (userName) user.userName = userName;
-    if (age) user.age = age;
-    if (file) user.avatarUrl = file.path;
+    if (fullName) user.fullName = fullName;
+    if (email) {
+      if (email !== user.email) {
+        const existingUser = await users.findOne({ email });
+        if (existingUser) {
+          return res.status(400).json({ message: "Email đã được sử dụng" });
+        }
+        user.email = email;
+      }
+    }
+    if (phone) user.phone = phone;
+    if (bio !== undefined) user.bio = bio;
+    if (location) user.location = location;
+    if (dob) user.dob = new Date(dob);
+
+    // Cập nhật avatar nếu có file upload
+    if (file) {
+      user.avatarUrl = file.path;
+    }
 
     if (oldPassword && newPassword) {
       const isMatch = await bcrypt.compare(oldPassword, user.password);
       if (!isMatch) {
         return res.status(400).json({ message: "Mật khẩu cũ không đúng" });
       }
+
+      if (newPassword.length < 6) {
+        return res
+          .status(400)
+          .json({ message: "Mật khẩu mới phải có ít nhất 6 ký tự" });
+      }
+
       user.password = bcrypt.hashSync(newPassword, 10);
     }
 
+    user.updatedAt = new Date();
+
     await user.save();
 
-    res.status(200).json({ message: "Cập nhật thông tin thành công", user });
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
+    res.status(200).json({
+      message: "Cập nhật thông tin thành công",
+      user: userResponse,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Lỗi server", error: error.message });
+    console.error("Update user error:", error);
+    res.status(500).json({
+      message: "Lỗi server",
+      error: error.message,
+    });
   }
 };
 
@@ -378,7 +426,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await User.findById(id);
+    const user = await users.findById(id);
     done(null, user);
   } catch (error) {
     done(error, null);
@@ -407,8 +455,9 @@ passport.use(
               email: profile.emails[0].value,
               password: randomPassword,
               role: "patient",
-              isVerified: true, // Automatically verify new users
+              isVerified: true,
               avatarUrl: profile.photos ? profile.photos[0].value : null,
+              bio: "",
             });
           }
           await user.save();
